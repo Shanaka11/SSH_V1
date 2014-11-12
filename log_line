@@ -54,7 +54,7 @@ public class log_line {
 	
 	void block_ip(){
 		
-		System.out.println(this.ip + " Blocked");
+		System.out.println("iptables -A -s " + this.ip + " -j DROP");
 		//this.block_time = time;
 		this.block = true;
 		
@@ -80,7 +80,7 @@ public class log_line {
 			
 			public void run() {
 				
-				System.out.println(ip +" Relesed");
+				System.out.println("iptables -D -s " + ip + " -j DROP");
 				block = false;
 				no_of_attacks = 1;
 				timer.cancel();
