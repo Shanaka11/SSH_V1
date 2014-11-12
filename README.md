@@ -10,3 +10,7 @@ Features upto 2014/11/11 (V 1.0)
   - Detect a predifined no of failed attempts from same ip address
   - Block the relevent ip address (Printing the command)
   - Relese the ip after some time passed (Printing the command)
+  
+Features upto 2014/11/12 (V 1.1)
+  
+  - Can read the log file continuesly
