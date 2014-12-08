@@ -14,3 +14,10 @@ Features upto 2014/11/11 (V 1.0)
 Features upto 2014/11/12 (V 1.1)
   
   - Can read the log file continuesly
+  
+Features upto 2014/8/12  (v 1.2)
+  - Unblocking is done in a different single thread
+  - Automatically refresh the suspected ips after some time
+  - Can map the Blocked Ip addresses
+  - Can run as a deamon
+  - Has a GUI launcher
