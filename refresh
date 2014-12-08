@@ -1,0 +1,35 @@
+class refresh extends Thread{
+			
+	boolean tim = false;
+		public void run(){
+			int c = 1;
+			
+			
+			while(true){
+				if( c == 0 ) {
+						
+					
+					tim = true;
+					c = 1;
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}else{
+					
+				try {
+					//This will reset the list once every hour
+					c = 0;
+					tim = false;
+					Thread.sleep(60*60*1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+}
