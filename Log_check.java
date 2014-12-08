@@ -11,22 +11,41 @@ import java.util.regex.Pattern;
 //This is the main class file
 public class Log_check {
 
-		public static void main (String[] args){
+	
+		public static void main(String[] args){
 			
 			String logFile = "auth (1).log";
+			//String blockFile = "Blocked_ips.txt";
+			UnBlocker unBlock = new UnBlocker();
+			refresh re = new refresh();
+			write_ip wip = new write_ip();
+			
+			re.start();
+			unBlock.start();
+			
+			wip.fileClean("Blocked_ips.txt");
+			wip.fileClean("out_log.txt");
+			
 			
 			try {
 				//make the reading of the file continue until specified otherwise
 				FileReader flr = new FileReader(logFile);
 				BufferedReader rd = new BufferedReader(flr);
+				
+			
 				String line = null;
 				
 				// This is placed here only temporally we want refresh the table in a given interval 
 				Hashtable<String,log_line> f_ips = new Hashtable<String,log_line>();
 				
 				while (true){
+					// to refresh the suspects after a time period
+					if (re.tim){
+						f_ips = new Hashtable<String,log_line>();
+					}
 					
-					if ((line = rd.readLine()) == null) {
+					line = rd.readLine();
+					if (line == null || line == "\n") {
 						
 						try {
 							
@@ -38,9 +57,10 @@ public class Log_check {
 						}
 						
 					}else{
-						if (line.contains("Invalid") || line.contains("PAM")){
-							//This will extract the ip addressese
 						
+						if (line.contains("Invalid") || line.contains("PAM") || !line.contains("preauth")){
+							//This will extract the ip addressese
+							
 							Pattern p = Pattern.compile("(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)");
 							Matcher m = p.matcher(line);
 						
@@ -51,15 +71,22 @@ public class Log_check {
 							
 							
 							
-								//Simplify the log_line class when using hashtables things are much easier
+								
 								
 								if(f_ips.containsKey(temp)){
 								
 									f_ips.get(temp).check_ip(temp);
 									
 									if(f_ips.get(temp).check_attack()){
-									
-										f_ips.get(temp).block_ip();	
+										//The ip is blocked now
+										//This part will add the time the ip is blocked to the list blocked
+										Pattern p1 = Pattern.compile("([\\d]{1,2}:[\\d]{1,2}:[\\d]{1,2})");
+										Matcher m1 = p1.matcher(line);
+										
+										if(m1.find()){
+											f_ips.get(temp).block_ip(m1.group(0));	
+										}
+										wip.write_i(temp,"Blocked_ips.txt");
 									}
 									
 								}else{
@@ -90,5 +117,7 @@ public class Log_check {
 			}
 			
 		}
+		
+		
 		
 }
