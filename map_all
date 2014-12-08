@@ -1,0 +1,149 @@
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+
+public class map_all {
+	
+	static String [] geocity = new String[571452];
+	static String url = "https://maps.googleapis.com/maps/api/staticmap?center=0&zoom=1&size=640x640&maptype=roadmap";
+	
+	public static void main(){
+		
+		LinkedList<String> list = new LinkedList<String>();
+		double local_id;
+		FileInputStream inputStream = null;
+		Scanner sc = null;
+		//Breaking point 333336 there is no 333337
+		
+		int j = 0;
+		
+		String temp_s;
+		
+		FileReader flr;
+		//loading the database in to a array
+		try {
+		    inputStream = new FileInputStream("GeoLiteCity-Location.csv");
+		    sc = new Scanner(inputStream, "UTF-8");
+		    while (sc.hasNextLine()) {
+		        String line = sc.nextLine();
+		        String [] k = line.split(",");
+		        temp_s = k[0] + "," + k[5] + "," + k[6];
+		        geocity[j] = temp_s;
+		        j++;
+		    }
+		} catch (FileNotFoundException ex) {
+				
+			   System.out.println("File not found !");
+		}
+		  
+		try {
+			flr = new FileReader("Blocked_ips.txt");
+			BufferedReader rd = new BufferedReader(flr);
+				
+			try {
+				while((temp_s = rd.readLine()) != null) {
+					list.add(temp_s);
+				}
+			} catch (IOException e) {
+			
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e1) {
+			
+			e1.printStackTrace();
+		}
+		
+		
+		for(int i = 0; i < list.size(); i++){
+			
+			local_id = Ip(list.get(i));
+			try {
+				try {
+			    inputStream = new FileInputStream("GeoLiteCity-Blocks.csv");
+				} catch (FileNotFoundException ex) {
+					   System.out.println("File not found !");
+					}
+			    sc = new Scanner(inputStream, "UTF-8");
+			    while (sc.hasNextLine()) {
+			       String line = sc.nextLine();
+			       String [] k = line.split("\"");
+			       if (Double.parseDouble(k[1]) <= local_id && Double.parseDouble(k[3]) >= local_id) {
+			       location(k[5]);
+				break;}
+			       			
+			    }
+			    // note that Scanner suppresses exceptions
+			    if (sc.ioException() != null) {
+			        try {
+						throw sc.ioException();
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+			    }
+			} finally {
+			    if (inputStream != null) {
+			        try {
+						inputStream.close();
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+			    }
+			    if (sc != null) {
+			        sc.close();
+			    }
+			}
+		  }
+		 openWebpage(url);
+			
+	}
+		
+	public static void location(String id) {
+		
+		int t_int = Integer.parseInt(id);
+		String[] k;
+		
+		if(t_int < 333337){
+			k = geocity[t_int - 1].split(",");
+		}else{
+			k = geocity[t_int - 2].split(",");
+		}
+		
+		url = url + "&markers=" + k[1] + "," + k[2];
+	}
+
+
+	//Opening the browser and displaying the map
+	public static void openWebpage(String urlString) {
+	    try {
+	        Desktop.getDesktop().browse(new URL(urlString).toURI());
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	
+	// getting long and lat from ip
+	public static Double Ip(String address){
+
+		String [] o = address.split("\\.");
+		 
+
+		 
+		 Double integer_ip =   ( 16777216 * Double.parseDouble(o[0]) )
+		             + (    65536 * Double.parseDouble(o[1]) )
+		             + (      256 * Double.parseDouble(o[2]) )
+		             +             Double.parseDouble(o[3]);
+		 //System.out.println(integer_ip);
+
+		return integer_ip;
+		}
+}
