@@ -1,7 +1,7 @@
-package ssh;
 
-import java.util.Timer;
-import java.util.TimerTask;
+
+import java.util.LinkedList;
+
 
 
 public class log_line {
@@ -12,10 +12,14 @@ public class log_line {
 	//Whether it is blocked or not
 	//When was the latest attack
 	
+	static LinkedList<ipTime> blocked = new LinkedList<ipTime>();
+	
 	int no_of_attacks = 1;
 	String ip = null;
-	//String block_time = null;
+	Time_t block_time;
 	boolean block = false;
+	ipTime blockedIp;
+	write_ip wt = new write_ip();
 	
 	
 	log_line(String in){
@@ -52,43 +56,32 @@ public class log_line {
 		
 	}
 	
-	void block_ip(){
+	void block_ip(String time){
 		
-		System.out.println("iptables -A -s " + this.ip + " -j DROP");
-		//this.block_time = time;
-		this.block = true;
+		//This just prints the command to out_log file
+		String tm = "iptables -A -s " + this.ip + " -j DROP";
+		wt.write_i(tm, "out_log.txt");
 		
-		//The unblocking of the ip
-		
-		new release_ip(1000);
-		
-		
-	}
+//********//*This will execute it
+		//Process p =null;
+		//String cmd ="sudo iptables -A INPUT -s " + this.ip +" -j DROP";
 	
-	class release_ip{
-		Timer timer;
+		this.block = true;
+		this.block_time = new Time_t(time);
+		/*
+		try {
+			p = Runtime.getRuntime().exec(cmd);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
 		
-		//The unblocking of the ip
-		release_ip ( int delay ){
+		log_line.blocked.add(blockedIp = new ipTime(this.ip,this .block_time));
 		
-			timer = new Timer();
-			timer.schedule(new block(), delay);
-			
-		}
 		
-		class block extends TimerTask {
-			
-			public void run() {
-				
-				System.out.println("iptables -D -s " + ip + " -j DROP");
-				block = false;
-				no_of_attacks = 1;
-				timer.cancel();
-				
-			}
-			
-		}
+		
 		
 	}
 	
 }
+
+
