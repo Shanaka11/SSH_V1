@@ -1,10 +1,12 @@
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,8 +16,15 @@ public class Log_check {
 	
 		public static void main(String[] args){
 			
-			String logFile = "auth (1).log";
-			//String blockFile = "Blocked_ips.txt";
+			//loading settings
+			File file = new File("Config.txt");
+			try {
+				Scanner x = new Scanner(file);
+			
+			
+			String logFile = x.nextLine();
+			x.close();
+		
 			UnBlocker unBlock = new UnBlocker();
 			refresh re = new refresh();
 			write_ip wip = new write_ip();
@@ -114,6 +123,9 @@ public class Log_check {
 				r.printStackTrace();
 				System.exit(-1);
 				
+			}
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
 			}
 			
 		}
