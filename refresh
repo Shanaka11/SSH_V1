@@ -1,8 +1,29 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 class refresh extends Thread{
 			
 	boolean tim = false;
 		public void run(){
 			int c = 1;
+			
+			Scanner x = null;
+			File file = new File("Config.txt");
+			String set = null;
+			//loading the settings
+			try {
+				
+				x = new Scanner(file);
+				set = x.nextLine();
+				set = x.nextLine();
+				set = x.nextLine();
+				x.close();
+				
+			} catch (FileNotFoundException e1) {
+				
+				e1.printStackTrace();
+			}
 			
 			
 			while(true){
@@ -21,10 +42,10 @@ class refresh extends Thread{
 				}else{
 					
 				try {
-					//This will reset the list once every hour
+					//This will reset the list 
 					c = 0;
 					tim = false;
-					Thread.sleep(60*60*1000);
+					Thread.sleep(Integer.parseInt(set)*1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
