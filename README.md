@@ -3,6 +3,7 @@ SSH bot blocker
 Readme for the correct implementation
 
 1 - Create two .jar files from the given .jar files
+
       - one .jar file must include following classes (name this as Launch_B.jar)
           
           - map_all.java
@@ -17,12 +18,12 @@ Readme for the correct implementation
 
 3 - Then to the same folder add following files
       
-      - Blocked_ips.txt
-      - Config.txt
-      - GeoLiteCity-Blocks.csv
-      - GeoLiteCity-Locations.csv
-      - Out_log.txt
-      - mytest.sh
+      - Blocked_ips.txt (Create a file)
+      - Config.txt (Provided)
+      - GeoLiteCity-Blocks.csv (Download from maxmind.com)
+      - GeoLiteCity-Locations.csv (Download from maxmind.com)
+      - Out_log.txt (Create)
+      - mytest.sh (Provided)
       
 4 - Then you can run the blocker by running Launch_B.jar
       
