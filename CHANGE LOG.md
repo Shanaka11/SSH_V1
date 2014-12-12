@@ -23,4 +23,5 @@ Features upto 2014/8/12  (v 1.2)
   - Has a GUI launcher
   
 Fratures upto 2014/10/2014
+  - Can change settings
 
