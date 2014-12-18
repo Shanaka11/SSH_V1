@@ -1,4 +1,4 @@
-package ssh;
+
 
 import java.io.IOException;
 import org.apache.commons.net.telnet.TelnetClient;
