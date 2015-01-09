@@ -1,0 +1,87 @@
+
+
+import java.util.LinkedList;
+
+
+
+public class log_line {
+
+	//This object will receive a String which is a line of a failed entry in auth.log
+	//It will contain ip address of the suspect
+	//No of attacks by that ip
+	//Whether it is blocked or not
+	//When was the latest attack
+	
+	static LinkedList<ipTime> blocked = new LinkedList<ipTime>();
+	
+	int no_of_attacks = 1;
+	String ip = null;
+	Time_t block_time;
+	boolean block = false;
+	ipTime blockedIp;
+	write_ip wt = new write_ip();
+	
+	
+	log_line(String in){
+		
+		this.ip = in;
+		
+	}
+	
+	boolean check_ip (String in){
+		
+		
+		if ( this.ip.equals(in)){
+			
+			increment();
+			return true;
+			
+		}else{
+			
+			return false;
+			
+		}
+		
+	}
+	
+	boolean check_attack(){
+		
+		return( this.no_of_attacks == 5 );
+		
+	}
+	
+	private void increment(){	
+			
+		no_of_attacks++;
+		
+	}
+	
+	void block_ip(String time){
+		
+		//This just prints the command to out_log file
+		String tm = "iptables -A -s " + this.ip + " -j DROP";
+		wt.write_i(tm, "out_log.txt");
+		
+//********//*This will execute it
+		//Process p =null;
+		//String cmd ="sudo iptables -A INPUT -s " + this.ip +" -j DROP";
+	
+		this.block = true;
+		this.block_time = new Time_t(time);
+		/*
+		try {
+			p = Runtime.getRuntime().exec(cmd);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+		
+		log_line.blocked.add(blockedIp = new ipTime(this.ip,this .block_time));
+		
+		
+		
+		
+	}
+	
+}
+
+

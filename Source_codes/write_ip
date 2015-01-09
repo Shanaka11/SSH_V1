@@ -1,0 +1,86 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Vector;
+
+
+public class write_ip {
+	
+	static Vector<String> temp = new Vector<String>();
+	String file;
+	
+	public void write_i(String ip,String file_name){
+		
+		file = file_name;
+		
+		Vector<String> temp = new Vector<String>();
+		
+		String temp_s;
+		
+		
+		
+		try {
+			FileReader flr = new FileReader(file);
+			FileWriter flw;
+			BufferedReader rd = new BufferedReader(flr);
+			
+			while((temp_s = rd.readLine()) != null) {
+				temp.add(temp_s);
+			}
+			
+			temp.add(ip);
+			
+			try {
+				
+				flw = new FileWriter(file);
+				BufferedWriter wr = new BufferedWriter(flw);
+				
+			for(int i = 0; i < temp.size(); i++ ){	
+				
+				wr.write(temp.get(i));
+				wr.write('\n');
+				
+			}
+				
+				
+				wr.close();
+				rd.close();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			
+		
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+		
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public void fileClean(String filename){
+		
+		File blk = new File(filename);
+		
+		try {
+			
+			PrintWriter writer = new PrintWriter(blk);
+			writer.print("");
+			writer.close();
+			
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+}
